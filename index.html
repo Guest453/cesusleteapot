@@ -12,7 +12,7 @@
 <meta property="og:video:height" content="600">
 <meta name="theme-color" content="#00ff00">
 
-<link id="favicon" rel="icon" type="image/gif" href="favicon.gif?v=3">
+<link rel="icon" href="favicon.gif" type="image/gif">
 
 <style>
   body { margin: 0; background: black; color: lime; overflow: hidden; font-family: monospace; }
@@ -34,15 +34,7 @@
   <script>
     document.getElementById('spam').innerText = 'shucks boii '.repeat(5000);
     
-    // force firefox to refresh the tab icon animation on the beat
-    const faviconElement = document.getElementById('favicon');
-    let toggle = false;
-    setInterval(() => {
-      toggle = !toggle;
-      // toggling a tiny hash parameter forces firefox to redraw the tab link element
-      faviconElement.href = toggle ? "favicon.gif?v=3&bop=1" : "favicon.gif?v=3&bop=2";
-    }, 308); // 195 bpm
-
+ 
     document.getElementById('big-boi').onclick = () => {
       let popup = window.open('', 'shuckswindow', 'width=800,height=600');
       
