@@ -3,34 +3,13 @@
 <head>
 <title>shucks</title>
 <style>
-  body { 
-    margin: 0; 
-    background: black; 
-    color: lime; 
-    overflow: hidden; 
-    font-family: monospace; 
-  }
+  body { margin: 0; background: black; color: lime; overflow: hidden; font-family: monospace; }
   #big-boi { 
-    font-size: 12vw; 
-    text-align: center; 
-    cursor: pointer; 
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%); 
-    z-index: 10; 
-    background: black; 
-    padding: 20px;
-    border: 3px solid lime;
+    font-size: 12vw; text-align: center; cursor: pointer; position: absolute; 
+    top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; 
+    background: black; padding: 20px; border: 3px solid lime; 
   }
-  #spam { 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    z-index: 1; 
-    opacity: 0.3; 
-    word-wrap: break-word; 
-  }
+  #spam { position: absolute; top: 0; left: 0; z-index: 1; opacity: 0.3; word-wrap: break-word; }
 </style>
 </head>
 <body>
@@ -41,10 +20,35 @@
     document.getElementById('spam').innerText = 'shucks boii '.repeat(5000);
     
     document.getElementById('big-boi').onclick = () => {
-      let popup = window.open('', 'shuckswindow', 'width=800,height=600');
+      let popup = window.open('', 'shuckswindow', 'width=800,height=600,left=200,top=200');
+      
       popup.document.write(`
-        <body style="margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh;">
-          <video src="shucks.mp4" autoplay loop controls style="max-width:100%; max-height:100%;"></video>
+        <style>
+          body { margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; }
+          @keyframes fnfbop {
+            0% { transform: scale(1.15) translateY(-20px); }
+            100% { transform: scale(1) translateY(0); }
+          }
+          video { max-width:100%; max-height:100%; animation: fnfbop 308ms ease-out infinite; }
+        </style>
+        <body>
+          <video src="shucks.mp4" autoplay loop controls></video>
+          <script>
+            let bop = false;
+            // 195 bpm = ~308ms per beat
+            setInterval(() => {
+              try {
+                if (bop) {
+                  window.moveBy(30, 30);
+                  window.resizeBy(-20, -20);
+                } else {
+                  window.moveBy(-30, -30);
+                  window.resizeBy(20, 20);
+                }
+                bop = !bop;
+              } catch(e) {}
+            }, 308);
+          <\/script>
         </body>
       `);
     };
