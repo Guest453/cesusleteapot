@@ -12,7 +12,7 @@
 <meta property="og:video:height" content="600">
 <meta name="theme-color" content="#00ff00">
 
-<link id="favicon" rel="icon" type="image/gif" href="favicon.gif">
+<link id="favicon" rel="icon" type="image/png" href="favicon.gif">
 
 <style>
   body { margin: 0; background: black; color: lime; overflow: hidden; font-family: monospace; }
@@ -34,15 +34,31 @@
   <script>
     document.getElementById('spam').innerText = 'shucks boii '.repeat(5000);
     
-    // brute force cache busting on the 195bpm beat to force firefox to play the gif
-    const favicon = document.getElementById('favicon');
-    let frameToggle = 0;
+    // create hidden video and canvas to stream directly to favicon slot
+    const favLink = document.getElementById('favicon');
+    const video = document.createElement('video');
+    video.src = 'shucks.mp4';
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
     
+    const canvas = document.createElement('canvas');
+    canvas.width = 32;
+    canvas.height = 32;
+    const ctx = canvas.getContext('2d');
+
+    // starts streaming video pixels to tab icon once interaction happens
+    document.addEventListener('click', () => {
+      video.play();
+    }, { once: true });
+
     setInterval(() => {
-      frameToggle = (frameToggle + 1) % 4; 
-      // appends a shifting query selector so firefox thinks it's a moving stream
-      favicon.href = `favicon.gif?frame=${frameToggle}&t=${Date.now()}`;
-    }, 308); // 195 bpm
+      if (!video.paused && !video.ended) {
+        ctx.clearRect(0, 0, 32, 32);
+        ctx.drawImage(video, 0, 0, 32, 32);
+        favLink.href = canvas.toDataURL('image/png');
+      }
+    }, 40); // smooth 25fps stream directly to tab icon
 
     document.getElementById('big-boi').onclick = () => {
       let popup = window.open('', 'shuckswindow', 'width=800,height=600');
