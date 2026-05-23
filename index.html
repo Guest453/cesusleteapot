@@ -11,7 +11,8 @@
 <meta property="og:video:width" content="800">
 <meta property="og:video:height" content="600">
 <meta name="theme-color" content="#00ff00">
-<link rel="icon" type="image/gif" href="favicon.gif">
+
+<link id="favicon" rel="icon" type="image/gif" href="favicon.gif?v=3">
 
 <style>
   body { margin: 0; background: black; color: lime; overflow: hidden; font-family: monospace; }
@@ -19,7 +20,10 @@
     font-size: 12vw; text-align: center; cursor: pointer; position: absolute; 
     top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; 
     background: black; padding: 20px; border: 3px solid lime; 
+    box-shadow: 0 0 20px lime;
+    transition: transform 0.1s;
   }
+  #big-boi:active { transform: translate(-50%, -50%) scale(0.9); }
   #spam { position: absolute; top: 0; left: 0; z-index: 1; opacity: 0.3; word-wrap: break-word; }
 </style>
 </head>
@@ -30,6 +34,15 @@
   <script>
     document.getElementById('spam').innerText = 'shucks boii '.repeat(5000);
     
+    // force firefox to refresh the tab icon animation on the beat
+    const faviconElement = document.getElementById('favicon');
+    let toggle = false;
+    setInterval(() => {
+      toggle = !toggle;
+      // toggling a tiny hash parameter forces firefox to redraw the tab link element
+      faviconElement.href = toggle ? "favicon.gif?v=3&bop=1" : "favicon.gif?v=3&bop=2";
+    }, 308); // 195 bpm
+
     document.getElementById('big-boi').onclick = () => {
       let popup = window.open('', 'shuckswindow', 'width=800,height=600');
       
@@ -37,10 +50,18 @@
         <style>
           body { margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; }
           
-          @keyframes smoothbop {
-            0% { transform: scale(1.1) translateY(-15px) rotate(2deg); animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); }
-            40% { transform: scale(1) translateY(0) rotate(0deg); }
-            100% { transform: scale(1) translateY(0) rotate(0deg); }
+          @keyframes hardcorebop {
+            0% { 
+              transform: scale(1.15, 0.85) translateY(20px); 
+              animation-timing-function: cubic-bezier(0.1, 1.2, 0.3, 1); 
+              filter: drop-shadow(0 0 30px lime); 
+            }
+            25% { transform: scale(0.95, 1.05) translateY(-5px); }
+            50% { 
+              transform: scale(1) translateY(0); 
+              filter: drop-shadow(0 0 5px lime); 
+            }
+            100% { transform: scale(1) translateY(0); }
           }
           
           .bop-container {
@@ -49,15 +70,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: smoothbop 308ms infinite;
+            animation: hardcorebop 308ms infinite;
           }
           
-          video { max-width:100%; max-height:100%; border: 3px solid lime; }
+          video { max-width:90%; max-height:90%; border: 4px solid lime; border-radius: 12px; }
         </style>
         <body>
           <div class="bop-container">
             <video src="shucks.mp4" autoplay loop controls></video>
           </div>
+          
+          <script>
+            setInterval(() => {
+              try {
+                let shakeX = (Math.random() - 0.5) * 50;
+                let shakeY = (Math.random() - 0.5) * 50;
+                window.moveBy(shakeX, shakeY);
+              } catch(e) {}
+            }, 40);
+          <\/script>
         </body>
       `);
     };
