@@ -20,35 +20,34 @@
     document.getElementById('spam').innerText = 'shucks boii '.repeat(5000);
     
     document.getElementById('big-boi').onclick = () => {
-      let popup = window.open('', 'shuckswindow', 'width=800,height=600,left=200,top=200');
+      let popup = window.open('', 'shuckswindow', 'width=800,height=600');
       
       popup.document.write(`
         <style>
           body { margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; }
-          @keyframes fnfbop {
-            0% { transform: scale(1.15) translateY(-20px); }
-            100% { transform: scale(1) translateY(0); }
+          
+          /* 195 bpm = ~308ms per beat */
+          @keyframes smoothbop {
+            0% { transform: scale(1.1) translateY(-15px) rotate(2deg); animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); }
+            40% { transform: scale(1) translateY(0) rotate(0deg); }
+            100% { transform: scale(1) translateY(0) rotate(0deg); }
           }
-          video { max-width:100%; max-height:100%; animation: fnfbop 308ms ease-out infinite; }
+          
+          .bop-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: smoothbop 308ms infinite;
+          }
+          
+          video { max-width:100%; max-height:100%; border: 3px solid lime; }
         </style>
         <body>
-          <video src="shucks.mp4" autoplay loop controls></video>
-          <script>
-            let bop = false;
-            // 195 bpm = ~308ms per beat
-            setInterval(() => {
-              try {
-                if (bop) {
-                  window.moveBy(30, 30);
-                  window.resizeBy(-20, -20);
-                } else {
-                  window.moveBy(-30, -30);
-                  window.resizeBy(20, 20);
-                }
-                bop = !bop;
-              } catch(e) {}
-            }, 308);
-          <\/script>
+          <div class="bop-container">
+            <video src="shucks.mp4" autoplay loop controls></video>
+          </div>
         </body>
       `);
     };
