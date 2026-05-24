@@ -12,7 +12,7 @@
 <meta property="og:video:height" content="600">
 <meta name="theme-color" content="#00ff00">
 
-<link id="favicon" rel="icon" type="image/png" href="favicon.gif">
+<link id="favicon" rel="icon" type="image/gif" href="favicon.gif">
 
 <style>
   body { margin: 0; background: black; color: lime; overflow: hidden; font-family: monospace; }
@@ -34,64 +34,53 @@
   <script>
     document.getElementById('spam').innerText = 'shucks boii '.repeat(5000);
     
-    // create hidden video and canvas to stream directly to favicon slot
-    const favLink = document.getElementById('favicon');
-    const video = document.createElement('video');
-    video.src = 'shucks.mp4';
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    
-    const canvas = document.createElement('canvas');
-    canvas.width = 32;
-    canvas.height = 32;
-    const ctx = canvas.getContext('2d');
-
-    // starts streaming video pixels to tab icon once interaction happens
-    document.addEventListener('click', () => {
-      video.play();
-    }, { once: true });
-
-    setInterval(() => {
-      if (!video.paused && !video.ended) {
-        ctx.clearRect(0, 0, 32, 32);
-        ctx.drawImage(video, 0, 0, 32, 32);
-        favLink.href = canvas.toDataURL('image/png');
-      }
-    }, 40); // smooth 25fps stream directly to tab icon
-
     document.getElementById('big-boi').onclick = () => {
-      let popup = window.open('', 'shuckswindow', 'width=800,height=600');
-      
-      popup.document.write(`
+      // window 1: the hardcore video popup
+      let videoPopup = window.open('', 'shuckswindow', 'width=800,height=600,left=100,top=100');
+      videoPopup.document.write(`
         <style>
           body { margin:0; background:black; display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; }
-          
           @keyframes hardcorebop {
             0% { transform: scale(1.15, 0.85) translateY(20px); animation-timing-function: cubic-bezier(0.1, 1.2, 0.3, 1); filter: drop-shadow(0 0 30px lime); }
             25% { transform: scale(0.95, 1.05) translateY(-5px); }
             50% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 5px lime); }
             100% { transform: scale(1) translateY(0); }
           }
-          
-          .bop-container {
-            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
-            animation: hardcorebop 308ms infinite;
-          }
-          
+          .bop-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; animation: hardcorebop 308ms infinite; }
           video { max-width:90%; max-height:90%; border: 4px solid lime; border-radius: 12px; }
         </style>
         <body>
-          <div class="bop-container">
-            <video src="shucks.mp4" autoplay loop controls></video>
-          </div>
-          
+          <div class="bop-container"><video src="shucks.mp4" autoplay loop controls></video></div>
           <script>
             setInterval(() => {
-              try {
-                window.moveBy((Math.random() - 0.5) * 50, (Math.random() - 0.5) * 50);
-              } catch(e) {}
+              try { window.moveBy((Math.random() - 0.5) * 50, (Math.random() - 0.5) * 50); } catch(e) {}
             }, 40);
+          <\/script>
+        </body>
+      `);
+
+      // window 2: the funny bouncing server icon popup
+      let iconPopup = window.open('', 'iconwindow', 'width=300,height=300,left=400,top=400');
+      iconPopup.document.write(`
+        <style>
+          body { margin: 0; background: black; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+          img { max-width: 80%; max-height: 80%; border: 3px dashed lime; cubic-bezier(0.4, 0, 0.2, 1); }
+        </style>
+        <body>
+          <img src="server-icon.png" alt="icon">
+          <script>
+            let dx = 4; // slow horizontal speed
+            let dy = 4; // slow vertical speed
+            
+            setInterval(() => {
+              try {
+                // bounce off the desktop screen boundaries safely
+                if (window.screenX <= 0 || window.screenX + window.outerWidth >= window.screen.availWidth) dx = -dx;
+                if (window.screenY <= 0 || window.screenY + window.outerHeight >= window.screen.availHeight) dy = -dy;
+                
+                window.moveBy(dx, dy);
+              } catch(e) {}
+            }, 16); // ~60fps smooth physics loop
           <\/script>
         </body>
       `);
